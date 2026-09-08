@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Skill - 概念深度教学方案</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --accent: #7c3aed;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --bg: #f8fafc;
+    --bg-card: #ffffff;
+    --text: #1e293b;
+    --text-light: #64748b;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+  header {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--primary) 100%);
+    color: white;
+    padding: 40px 30px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(124,58,237,0.2);
+  }
+  header h1 { font-size: 2.2em; margin-bottom: 10px; }
+  header .subtitle { opacity: 0.95; font-size: 1.05em; }
+  header .meta { margin-top: 15px; font-size: 0.9em; opacity: 0.85; }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid var(--border);
+  }
+  .card h2 {
+    color: var(--primary-dark);
+    border-left: 4px solid var(--primary);
+    padding-left: 12px;
+    margin-bottom: 18px;
+    font-size: 1.4em;
+  }
+  .card h3 {
+    color: var(--accent);
+    margin: 18px 0 10px;
+    font-size: 1.15em;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.95em;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: left;
+  }
+  th {
+    background: #f1f5f9;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .shadow-box {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid var(--warning);
+    padding: 15px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+  .shadow-box .label {
+    display: inline-block;
+    background: var(--warning);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+
+  .breakthrough-box {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-left: 4px solid var(--success);
+    padding: 15px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+  .breakthrough-box .label {
+    display: inline-block;
+    background: var(--success);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    padding: 8px 0;
+    padding-left: 28px;
+    position: relative;
+  }
+  .checklist li::before {
+    content: "□";
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  .type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 15px 0;
+  }
+  .type-card {
+    background: linear-gradient(135deg, #f5f3ff 0%, #ede9fe 100%);
+    border: 2px solid #c4b5fd;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .type-card:hover { transform: translateY(-3px); }
+  .type-card .num {
+    background: var(--accent);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  .type-card h4 { color: var(--primary-dark); margin: 6px 0; font-size: 1.05em; }
+  .type-card p { font-size: 0.85em; color: var(--text-light); }
+
+  .judgment-card {
+    background: #f8fafc;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 12px 0;
+  }
+  .judgment-card.level-1 { border-left: 4px solid #3b82f6; }
+  .judgment-card.level-2 { border-left: 4px solid #6366f1; }
+  .judgment-card.level-3 { border-left: 4px solid #8b5cf6; }
+  .judgment-card.level-4 { border-left: 4px solid #ec4899; }
+  .judgment-card .level-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .judgment-card.level-1 .level-tag { background: #3b82f6; }
+  .judgment-card.level-2 .level-tag { background: #6366f1; }
+  .judgment-card.level-3 .level-tag { background: #8b5cf6; }
+  .judgment-card.level-4 .level-tag { background: #ec4899; }
+
+  .core-point {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 2px solid #f59e0b;
+    border-radius: 10px;
+    padding: 18px;
+    margin: 20px 0;
+    font-weight: 500;
+  }
+  .core-point::before {
+    content: "💡 核心观点";
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #92400e;
+  }
+
+  .self-eval-grid {
+    display: grid;
+    grid-template-columns: 1fr repeat(4, 80px);
+    gap: 6px;
+    align-items: center;
+    margin: 12px 0;
+    font-size: 0.92em;
+  }
+  .self-eval-grid .header { font-weight: 600; text-align: center; background: #f1f5f9; padding: 6px; border-radius: 4px; }
+  .self-eval-grid .topic { padding: 6px; }
+  .self-eval-grid .cell { text-align: center; padding: 6px; background: #fafafa; border-radius: 4px; }
+
+  code, pre {
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 0.92em;
+    color: var(--accent);
+  }
+  pre {
+    padding: 12px 16px;
+    overflow-x: auto;
+    line-height: 1.5;
+  }
+  pre code { background: transparent; padding: 0; color: #1e293b; }
+
+  .tree {
+    background: #1e293b;
+    color: #f8fafc;
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-family: "Consolas", monospace;
+    font-size: 0.88em;
+    line-height: 1.6;
+    margin: 15px 0;
+  }
+  .tree .folder { color: #fbbf24; }
+  .tree .file { color: #93c5fd; }
+  .tree .comment { color: #94a3b8; }
+
+  .concept-map {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin: 15px 0;
+    padding: 15px;
+    background: #f8fafc;
+    border-radius: 10px;
+  }
+  .concept-node {
+    background: white;
+    border: 2px solid var(--primary);
+    color: var(--primary-dark);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.95em;
+  }
+  .concept-node.outer { border-color: var(--accent); color: var(--accent); }
+  .concept-op { color: var(--text-light); font-weight: 600; font-size: 0.95em; }
+
+  .nav-toc {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 28px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+  }
+  .nav-toc h3 { color: var(--primary-dark); margin-bottom: 10px; }
+  .nav-toc ol { padding-left: 20px; }
+  .nav-toc ol li { margin: 4px 0; }
+
+  footer {
+    text-align: center;
+    color: var(--text-light);
+    padding: 30px 0;
+    font-size: 0.9em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>Skill</h1>
+    <div class="subtitle">概念深度教学方案 · 黑格尔《逻辑学》概念论三环节设计</div>
+    <div class="meta">适用学段：AI Agent 入门 / 工程师内训 ｜ 学习时长：1-2 课时 ｜ 自指场景：用 Skill 学习 Skill 本身</div>
+  </header>
+
+  <div class="nav-toc">
+    <h3>📋 内容导航</h3>
+    <ol>
+      <li><a href="#diagnose">诊断报告——学生在哪里"卡"住了？</a></li>
+      <li><a href="#teach">教学设计——普遍性 → 特殊性 → 个体性</a></li>
+      <li><a href="#judgment">判断与推理——四层递进训练</a></li>
+      <li><a href="#assess">评估工具——备课清单 / 自评表 / 辅助 Prompt</a></li>
+      <li><a href="#summary">核心教学观点</a></li>
+    </ol>
+  </div>
+
+  <section id="diagnose" class="card">
+    <h2>① 诊断报告 —— 学生在哪里"卡"住了？</h2>
+
+    <h3>1.1 存在论诊断（学生把概念当成了什么？）</h3>
+    <table>
+      <tr><th>学生心中的"影子"</th><th>典型话术</th><th>真实样貌</th></tr>
+      <tr>
+        <td><strong>影子 A：Skill = 一个工具/命令</strong></td>
+        <td>"Skill 不就是 find-skills 这种命令吗？"</td>
+        <td>Skill 是能力包，包含文档+脚本+资源；工具只是 Skill 暴露给 Agent 的一个动作</td>
+      </tr>
+      <tr>
+        <td><strong>影子 B：Skill = MCP 连接器</strong></td>
+        <td>"Skill 跟那些 connector 不都是接外部服务的吗？"</td>
+        <td>MCP 是协议（对接外部 API/数据库），Skill 是 Agent 内部的工作流封装，两者层级不同</td>
+      </tr>
+      <tr>
+        <td><strong>影子 C：Skill = Prompt 模板</strong></td>
+        <td>"Skill 不就是写一段提示词吗？"</td>
+        <td>Skill 可以包含可执行脚本、参考文档、资产文件，远不止文本提示</td>
+      </tr>
+      <tr>
+        <td><strong>影子 D：Skill = Function Call / API</strong></td>
+        <td>"Skill 不就是函数调用吗？"</td>
+        <td>Function Call 是单次动作，Skill 是带上下文加载、决策路径、文件操作的完整工作流</td>
+      </tr>
+    </table>
+
+    <div class="breakthrough-box">
+      <span class="label">教学切入点</span>
+      让学生打开 <code>~/.workbuddy/skills/deep-concept-teaching/SKILL.md</code>，亲眼看到 SKILL.md 里既有"何时使用"的判定逻辑，也有"工作步骤"的执行清单，还有"输出格式"的规范——这就是 Skill 不是一个工具的实证。
+    </div>
+
+    <h3>1.2 本质论诊断（学生漏掉了什么内在结构？）</h3>
+    <table>
+      <tr><th>必备要素</th><th>学生是否意识到</th></tr>
+      <tr><td>物理层：SKILL.md + scripts/ + references/ + assets/ 四种文件</td><td>❌ 以为 Skill 就是一个 .md 文件</td></tr>
+      <tr><td>逻辑层：frontmatter (name/description) → 正文（when to use / how to use）→ 输出规范</td><td>⚠️ 看过 SKILL.md 但没注意结构</td></tr>
+      <tr><td>加载层：Agent 识别意图 → 调用 Skill 工具 → SKILL.md 进入上下文 → 按指令执行</td><td>❌ 完全没意识到"上下文注入"机制</td></tr>
+      <tr><td>作用域层：User-level (~/.workbuddy/skills/) vs Project-level ({workspace}/.workbuddy/skills/)</td><td>❌ 不知道有区分</td></tr>
+      <tr><td>生命周期层：创建 → 使用 → 修改 → 反射优化 → 沉淀</td><td>❌ 以为装上就用、不用就删</td></tr>
+    </table>
+
+    <div class="breakthrough-box">
+      <span class="label">突破口</span>
+      用"<strong>菜谱</strong>"的隐喻——<strong>SKILL.md 是菜谱，scripts/ 是预先准备好的半成品食材，references/ 是参考书，assets/ 是摆盘的装饰</strong>。Skill = 一本完整的烹饪指南，让 Agent 能复现一道菜。
+    </div>
+
+    <h3>1.3 概念论诊断（学生能用概念做事吗？）</h3>
+    <table>
+      <tr><th>任务层级</th><th>学生能做到吗？</th></tr>
+      <tr><td>识别：看到一个 Skill 目录能列出所有组成部分</td><td>⚠️ 只认识 SKILL.md</td></tr>
+      <tr><td>区分：能说清"Skill / MCP / Tool / Prompt"四种概念差异</td><td>❌ 混用</td></tr>
+      <tr><td>解释：能说清"为什么 Skill 设计核心是 SKILL.md"</td><td>❌ 不知道</td></tr>
+      <tr><td>设计：能判断什么场景该写一个 Skill</td><td>❌ 没方法</td></tr>
+      <tr><td>评价：能评审一个 Skill 的好坏</td><td>❌ 没标准</td></tr>
+    </table>
+  </section>
+
+  <section id="teach" class="card">
+    <h2>② 教学设计 —— 「普遍性→特殊性→个体性」三环节</h2>
+
+    <h3>2.1 普遍性：什么是"Skill"？（建立统一定义）</h3>
+    <blockquote>
+      <strong>定义</strong>：Skill 是 AI Agent 中<strong>预封装的能力包</strong>，由 <code>SKILL.md</code>（必选）+ <code>scripts/</code>、<code>references/</code>、<code>assets/</code>（可选）组成，通过 <code>Skill</code> 工具按需加载，向 Agent 提供<strong>特定领域的专业工作流</strong>。
+    </blockquote>
+
+    <p style="margin-top:10px;">它解决的核心问题是：<strong>让 Agent 在需要时，能像换上一个领域专家的大脑一样工作</strong>。</p>
+
+    <div class="tree">
+<span class="comment"># Skill 目录结构（典型）</span>
+<span class="folder">~/.workbuddy/skills/your-skill/</span>
+├── <span class="file">SKILL.md</span>          <span class="comment"># 必选，包含 frontmatter</span>
+│   ├── name: xxx
+│   ├── description: xxx
+│   └── 正文 (when/how/output)
+├── <span class="folder">scripts/</span>  <span class="comment">(可选) ← 可执行脚本</span>
+├── <span class="folder">references/</span> <span class="comment">(可选) ← 参考文档/索引</span>
+└── <span class="folder">assets/</span>  <span class="comment">(可选) ← 模板/图片/数据</span>
+
+<span class="comment">↓</span>
+Agent 调用 Skill 工具
+<span class="comment">↓</span>
+SKILL.md 注入到 Agent 上下文
+<span class="comment">↓</span>
+Agent 按工作流执行（调用其他工具/读文件/输出）
+    </div>
+
+    <div class="core-point">
+      <strong>关键洞见</strong>：Skill = <strong>可复用的工作流文档</strong> + <strong>按需注入的专家知识</strong>。它不是工具，不是 prompt，而是一种让 Agent "角色化"的机制。
+    </div>
+
+    <h3>2.2 特殊性：5 类 Skill（识别差异）</h3>
+    <div class="type-grid">
+      <div class="type-card">
+        <div class="num">1</div>
+        <h4>教学/方法论类</h4>
+        <p>概念教学/工作流设计<br>deep-concept-teaching<br>skill-creator</p>
+      </div>
+      <div class="type-card">
+        <div class="num">2</div>
+        <h4>数据查询类</h4>
+        <p>自然语言 → 结构化数据<br>neodata-financial-search<br>westock-data</p>
+      </div>
+      <div class="type-card">
+        <div class="num">3</div>
+        <h4>工具执行类</h4>
+        <p>自动化操作<br>agent-browser<br>expert-manager</p>
+      </div>
+      <div class="type-card">
+        <div class="num">4</div>
+        <h4>安装/市场类</h4>
+        <p>搜索/安装其他 Skill<br>find-skills<br>marketplace-skill-installer</p>
+      </div>
+      <div class="type-card">
+        <div class="num">5</div>
+        <h4>多模态生成类</h4>
+        <p>图像/视频/3D 生成<br>3D模型与视频特效</p>
+      </div>
+    </div>
+
+    <div class="breakthrough-box">
+      <span class="label">教师提问</span>
+      "如果用户问'帮我查一下腾讯的股价'，Agent 应该用哪类 Skill？"
+      <br>答：<strong>② 数据查询类</strong>（<code>westock-data</code> 或 <code>neodata-financial-search</code>）。Skill 工具的 description 字段会触发 Agent 自动匹配。
+    </div>
+
+    <h3>2.3 个体性：在真实 Agent 中落地（解剖一个 Skill）</h3>
+    <p>以 <code>deep-concept-teaching</code> 为例（学生已经在用的！）：</p>
+
+    <div class="tree">
+<span class="folder">~/.workbuddy/skills/deep-concept-teaching/</span>
+└── <span class="file">SKILL.md</span>    <span class="comment">← 唯一的核心文件</span>
+    ├── <span class="comment">frontmatter:</span>
+    │   ├── name: deep-concept-teaching
+    │   ├── description: 概念深度教学技能——基于黑格尔《逻辑学》...
+    │   └── triggers: 概念教学 / 概念深度 / 大概念...
+    └── <span class="comment">正文:</span>
+        ├── 适用场景判定（什么情况下用）
+        ├── 工作步骤（4 步：诊断→设计→判断→评估）
+        ├── 输出规范（4 部分结构）
+        └── 注意事项
+    </div>
+
+    <div class="breakthrough-box">
+      <span class="label">关键文件 SKILL.md 的三要素</span>
+      <ol style="margin-top:8px;">
+        <li><strong>frontmatter</strong>（YAML）：name + description + 可选 triggers——Agent 据此判断何时加载</li>
+        <li><strong>正文"何时使用"</strong>：明确场景与不适用情况——决定加载决策</li>
+        <li><strong>正文"如何使用"</strong>：具体步骤、工具调用、输出格式——决定执行路径</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="judgment" class="card">
+    <h2>③ 判断与推理 —— 四层递进训练</h2>
+
+    <div class="judgment-card level-1">
+      <span class="level-tag">① 质的判断</span>
+      <strong>问题</strong>：下面哪个是 Skill，哪个不是？
+      <ol>
+        <li><code>~/.workbuddy/skills/deep-concept-teaching/SKILL.md</code></li>
+        <li>一段写在 prompt 里的"请用费曼技巧解释"</li>
+        <li>一个 MCP server（如 <code>tencent-docs</code> 连接器）</li>
+        <li>一个 Python 函数 <code>def find_files(): ...</code></li>
+      </ol>
+      <strong>✅ 答案</strong>：
+      <ul>
+        <li>① ✅ 是 Skill（完整的能力包）</li>
+        <li>② ❌ 不是（只是 prompt 文本，没有目录结构、加载机制）</li>
+        <li>③ ❌ 不是（MCP 是外部服务协议，Skill 是 Agent 内部封装）</li>
+        <li>④ ❌ 不是（函数是 Skill 内部 scripts/ 里的零件，不是 Skill 本身）</li>
+      </ul>
+    </div>
+
+    <div class="judgment-card level-2">
+      <span class="level-tag">② 反思判断</span>
+      <strong>问题</strong>：请把 Skill 与以下概念区分清楚。
+
+      <table>
+        <tr><th>维度</th><th>Skill</th><th>MCP 连接器</th><th>Tool (工具)</th><th>Prompt (提示词)</th></tr>
+        <tr><td>本质</td><td>能力包/工作流</td><td>外部服务协议</td><td>单一动作函数</td><td>文本指令</td></tr>
+        <tr><td>作用域</td><td>Agent 内部</td><td>跨 Agent 通用</td><td>单次调用</td><td>当次对话</td></tr>
+        <tr><td>结构</td><td>SKILL.md + 资源</td><td>server config</td><td>函数签名</td><td>字符串</td></tr>
+        <tr><td>复用性</td><td>高（封装完整工作流）</td><td>中（封装服务）</td><td>低（单点能力）</td><td>低（一次性）</td></tr>
+        <tr><td>示例</td><td>deep-concept-teaching</td><td>tencent-docs</td><td>Read, Bash, WebFetch</td><td>"请帮我写一首诗"</td></tr>
+        <tr><td>关系</td><td>可调用 Tools/MCP</td><td>通过 Tool 调用</td><td>原子能力</td><td>Skill 的输入之一</td></tr>
+      </table>
+
+      <div class="concept-map">
+        <span class="concept-node">Skill</span>
+        <span class="concept-op">⊃</span>
+        <span class="concept-node">Tool</span>
+      </div>
+      <div class="concept-map">
+        <span class="concept-node outer">Skill</span>
+        <span class="concept-op">⊥</span>
+        <span class="concept-node outer">MCP</span>
+      </div>
+      <div class="concept-map">
+        <span class="concept-node">Skill</span>
+        <span class="concept-op">⊃</span>
+        <span class="concept-node">Prompt</span>
+      </div>
+
+      <strong>关键洞见</strong>：
+      <ul style="margin-top:6px;">
+        <li><strong>Skill ⊃ Tool</strong>：Skill 内部会调用多个 Tool</li>
+        <li><strong>Skill ⊥ MCP</strong>：MCP 是另一种能力来源（外部服务），Skill 可以选择性地通过 Tool 调用 MCP</li>
+        <li><strong>Skill ⊃ Prompt</strong>：Skill 包含 prompt 设计，但远不止 prompt</li>
+      </ul>
+    </div>
+
+    <div class="judgment-card level-3">
+      <span class="level-tag">③ 必然判断</span>
+      <strong>问题</strong>：为什么 Skill 设计核心是 <strong>SKILL.md</strong> 这个 Markdown 文件，而不是可执行代码？
+      <br><br>
+      <strong>三层原因</strong>：
+      <ol>
+        <li><strong>上下文注入原理</strong>：LLM Agent 是基于上下文的——SKILL.md 注入上下文后，Agent 才能"读懂"工作流；纯代码 Agent 看不到。</li>
+        <li><strong>可读性优先</strong>：Markdown 是人类与 LLM 都能理解的格式。Agent 需要先"读懂"才能"执行"，不能像人一样只看代码注释。</li>
+        <li><strong>决策灵活性</strong>：工作流里往往有"判断分支"——Agent 需要根据上下文决定走哪条路，纯代码无法承担决策（只能脚本化执行）。</li>
+      </ol>
+
+      <div class="breakthrough-box">
+        <span class="label">💡 反例</span>
+        如果是纯脚本（如一段 Python），Agent 只能"执行它"，不能"理解它"；遇到需要判断的场景就卡住。<strong>SKILL.md 让 Agent 既看得见又能执行</strong>。
+      </div>
+    </div>
+
+    <div class="judgment-card level-4">
+      <span class="level-tag">④ 概念判断（应用设计）</span>
+      <strong>任务</strong>：判断下列场景是否应该创建一个 Skill，以及为什么。
+      <table>
+        <tr><th>场景</th><th>是否创建 Skill</th><th>理由</th></tr>
+        <tr><td>1. 一次性翻译一篇文档</td><td>❌</td><td>单次任务，无需封装为可复用能力</td></tr>
+        <tr><td>2. 每月自动生成竞品分析报告</td><td>✅</td><td>周期性任务，工作流固定，适合封装</td></tr>
+        <tr><td>3. 每天根据股价生成交易信号</td><td>✅</td><td>重复执行 + 多步骤决策，Skill 可降低使用门槛</td></tr>
+        <tr><td>4. 临时调试一段代码</td><td>❌</td><td>临时任务，没有复用价值</td></tr>
+        <tr><td>5. 公司内部"周报生成器"</td><td>✅</td><td>多人/多次复用，需要统一规范</td></tr>
+      </table>
+
+      <strong>Skill 创建决策清单</strong>：
+      <ul style="margin-top:6px;">
+        <li>☐ 任务是<strong>重复性</strong>的（≥3 次/月）</li>
+        <li>☐ 工作流是<strong>多步骤</strong>的（≥3 个工具调用）</li>
+        <li>☐ 流程是<strong>稳定</strong>的（不会每周变）</li>
+        <li>☐ 团队/个人<strong>都需要</strong>（不只是个人一次性）</li>
+        <li>☐ <strong>SKILL.md 能写清楚</strong>（如果不能用 Markdown 表达，就不该是 Skill）</li>
+      </ul>
+
+      <div class="breakthrough-box">
+        <span class="label">💡 何时不该用 Skill</span>
+        临时任务、单步任务、变化快的任务——直接用普通工具调用更高效。
+      </div>
+    </div>
+  </section>
+
+  <section id="assess" class="card">
+    <h2>④ 评估工具</h2>
+
+    <h3>4.1 教师备课自检清单</h3>
+    <ul class="checklist">
+      <li>我能用一句话说出 Skill 的统一定义</li>
+      <li>我能列出 Skill 目录的 4 种文件类型</li>
+      <li>我能区分 Skill / MCP / Tool / Prompt 四种概念</li>
+      <li>我能解释"为什么 SKILL.md 是 Skill 的核心"</li>
+      <li>我能描述 Skill 的加载与执行机制</li>
+      <li>我能为一个真实场景判断"该不该创建 Skill"</li>
+      <li>我能写出合格的 SKILL.md frontmatter</li>
+    </ul>
+
+    <h3>4.2 学生自评表</h3>
+    <div class="self-eval-grid">
+      <div class="header">维度</div>
+      <div class="header">不懂</div>
+      <div class="header">听过</div>
+      <div class="header">能解释</div>
+      <div class="header">能应用</div>
+
+      <div class="topic">1. Skill 的统一定义</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">2. Skill 目录的 4 种文件</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">3. Skill vs MCP vs Tool vs Prompt</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">4. SKILL.md 三要素</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">5. Skill 加载机制</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">6. User-level vs Project-level</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">7. 何时该创建 Skill</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">8. 写出一个最小可用 SKILL.md</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+    </div>
+    <p style="margin-top:10px; font-size:0.92em; color:var(--text-light);">
+      全部 ≥ "能解释" 即达标，"能应用" ≥ 6 项即优秀。
+    </p>
+
+    <h3>4.3 DeepSeek 辅助 Prompt</h3>
+
+    <div class="judgment-card level-1">
+      <strong>学生自查 Prompt</strong>：
+      <pre><code>我正在学习"Skill"这个概念（指 AI Agent 中的能力包）。请按以下结构帮我自查：
+
+1. 用一句话定义"Skill"，不超过 30 字
+2. 列出 Skill 目录的 4 种文件类型及其作用
+3. 区分 Skill / MCP / Tool / Prompt 四种概念（用对照表）
+4. 解释为什么 Skill 设计核心是 SKILL.md
+5. 设计一个"每周自动生成竞品报告"的 Skill 草图（包含 frontmatter、3 个核心步骤、输出格式）
+
+我会给你我的回答，请你打分（0-10）并指出"影子理解"。</code></pre>
+    </div>
+
+    <div class="judgment-card level-2">
+      <strong>教师备课 Prompt</strong>：
+      <pre><code>我要给学生讲"Skill"概念（学段：AI Agent 入门工程师，1 课时 45 分钟）。
+
+请帮我设计：
+1. 一个 5 分钟的导入故事（用"菜谱"或"乐高积木"的隐喻）
+2. 3 个递进式课堂提问（从定义 → 区分 → 设计）
+3. 1 个分组任务（4 人小组，30 分钟）：为一个真实场景设计 Skill 目录结构
+4. 1 道课后思考题：评估"是否值得把现有 prompt 升级为 Skill"的标准
+
+要求：贴合"黑格尔概念论"——让学生先识别"影子理解"（特别是把 Skill 当成 Prompt 的误区），再突破，最后能独立设计一个 Skill。</code></pre>
+    </div>
+  </section>
+
+  <section id="summary" class="card">
+    <h2>⑤ 核心教学观点</h2>
+    <div class="core-point">
+      <strong>"Skill"不是工具、不是命令、不是 prompt，而是 AI Agent 的"能力包"——以 SKILL.md 为核心，按需注入上下文，把特定领域的工作流封装为可复用的"专家大脑"。Skill ⊃ Tool、Skill ⊥ MCP、Skill ⊃ Prompt。</strong>
+    </div>
+  </section>
+
+  <footer>
+    教学反思：本方案刻意选了"Skill"这个<strong>自指</strong>的概念——学生正在使用的工具本身。教学关键突破点是：<strong>让学生打开自己电脑上的 ~/.workbuddy/skills/ 目录，亲眼看 SKILL.md 长什么样</strong>。这比任何抽象讲解都有效。建议第一节课做"解剖 Skill 目录"实验，第二节课做"为自己的任务设计 Skill"任务。
+  </footer>
+
+</div>
+</body>
+</html>

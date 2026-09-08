@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>大模型的上下文 - 概念深度教学方案</title>
+<style>
+  :root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --accent: #7c3aed;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --bg: #f8fafc;
+    --bg-card: #ffffff;
+    --text: #1e293b;
+    --text-light: #64748b;
+    --border: #e2e8f0;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 20px;
+  }
+  .container { max-width: 960px; margin: 0 auto; }
+  header {
+    background: linear-gradient(135deg, var(--primary) 0%, var(--accent) 100%);
+    color: white;
+    padding: 40px 30px;
+    border-radius: 16px;
+    margin-bottom: 30px;
+    box-shadow: 0 10px 30px rgba(37,99,235,0.2);
+  }
+  header h1 { font-size: 2.2em; margin-bottom: 10px; }
+  header .subtitle { opacity: 0.95; font-size: 1.05em; }
+  header .meta { margin-top: 15px; font-size: 0.9em; opacity: 0.85; }
+
+  .card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid var(--border);
+  }
+  .card h2 {
+    color: var(--primary-dark);
+    border-left: 4px solid var(--primary);
+    padding-left: 12px;
+    margin-bottom: 18px;
+    font-size: 1.4em;
+  }
+  .card h3 {
+    color: var(--accent);
+    margin: 18px 0 10px;
+    font-size: 1.15em;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 15px 0;
+    font-size: 0.95em;
+  }
+  th, td {
+    border: 1px solid var(--border);
+    padding: 10px 12px;
+    text-align: left;
+  }
+  th {
+    background: #f1f5f9;
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .shadow-box {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    border-left: 4px solid var(--warning);
+    padding: 15px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+  .shadow-box .label {
+    display: inline-block;
+    background: var(--warning);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+
+  .breakthrough-box {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    border-left: 4px solid var(--success);
+    padding: 15px 18px;
+    border-radius: 8px;
+    margin: 12px 0;
+  }
+  .breakthrough-box .label {
+    display: inline-block;
+    background: var(--success);
+    color: white;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 0.85em;
+    font-weight: 600;
+    margin-right: 8px;
+  }
+
+  .checklist { list-style: none; padding: 0; }
+  .checklist li {
+    padding: 8px 0;
+    padding-left: 28px;
+    position: relative;
+  }
+  .checklist li::before {
+    content: "□";
+    position: absolute;
+    left: 0;
+    color: var(--primary);
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+
+  .layer-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 20px 0;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .layer {
+    padding: 12px 18px;
+    border-radius: 8px;
+    color: white;
+    font-weight: 500;
+    text-align: center;
+    position: relative;
+  }
+  .layer-1 { background: linear-gradient(90deg, #6366f1, #4f46e5); }
+  .layer-2 { background: linear-gradient(90deg, #8b5cf6, #7c3aed); }
+  .layer-3 { background: linear-gradient(90deg, #a855f7, #9333ea); }
+  .layer-4 { background: linear-gradient(90deg, #d946ef, #c026d3); }
+  .layer-arrow {
+    text-align: center;
+    color: var(--text-light);
+    font-size: 1.4em;
+  }
+  .model-box {
+    background: linear-gradient(135deg, #1e293b, #0f172a);
+    color: white;
+    padding: 14px;
+    border-radius: 8px;
+    text-align: center;
+    margin: 8px 0;
+    font-weight: 600;
+    letter-spacing: 1px;
+  }
+
+  .type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 12px;
+    margin: 15px 0;
+  }
+  .type-card {
+    background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 100%);
+    border: 2px solid #93c5fd;
+    border-radius: 10px;
+    padding: 14px;
+    text-align: center;
+    transition: transform 0.2s;
+  }
+  .type-card:hover { transform: translateY(-3px); }
+  .type-card .num {
+    background: var(--primary);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-bottom: 8px;
+  }
+  .type-card h4 { color: var(--primary-dark); margin: 6px 0; font-size: 1.05em; }
+  .type-card p { font-size: 0.85em; color: var(--text-light); }
+
+  .judgment-card {
+    background: #f8fafc;
+    border: 1px dashed var(--border);
+    border-radius: 10px;
+    padding: 16px;
+    margin: 12px 0;
+  }
+  .judgment-card.level-1 { border-left: 4px solid #3b82f6; }
+  .judgment-card.level-2 { border-left: 4px solid #6366f1; }
+  .judgment-card.level-3 { border-left: 4px solid #8b5cf6; }
+  .judgment-card.level-4 { border-left: 4px solid #ec4899; }
+  .judgment-card .level-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 0.8em;
+    color: white;
+    font-weight: 600;
+    margin-bottom: 10px;
+  }
+  .judgment-card.level-1 .level-tag { background: #3b82f6; }
+  .judgment-card.level-2 .level-tag { background: #6366f1; }
+  .judgment-card.level-3 .level-tag { background: #8b5cf6; }
+  .judgment-card.level-4 .level-tag { background: #ec4899; }
+
+  .core-point {
+    background: linear-gradient(135deg, #fef3c7, #fde68a);
+    border: 2px solid #f59e0b;
+    border-radius: 10px;
+    padding: 18px;
+    margin: 20px 0;
+    font-weight: 500;
+  }
+  .core-point::before {
+    content: "💡 核心观点";
+    display: block;
+    font-weight: 700;
+    margin-bottom: 8px;
+    color: #92400e;
+  }
+
+  .self-eval-grid {
+    display: grid;
+    grid-template-columns: 1fr repeat(4, 80px);
+    gap: 6px;
+    align-items: center;
+    margin: 12px 0;
+    font-size: 0.92em;
+  }
+  .self-eval-grid .header { font-weight: 600; text-align: center; background: #f1f5f9; padding: 6px; border-radius: 4px; }
+  .self-eval-grid .topic { padding: 6px; }
+  .self-eval-grid .cell { text-align: center; padding: 6px; background: #fafafa; border-radius: 4px; }
+
+  code {
+    background: #f1f5f9;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: "Consolas", "Monaco", monospace;
+    font-size: 0.92em;
+    color: var(--accent);
+  }
+
+  .nav-toc {
+    background: white;
+    border-radius: 12px;
+    padding: 20px 28px;
+    margin-bottom: 20px;
+    border: 1px solid var(--border);
+  }
+  .nav-toc h3 { color: var(--primary-dark); margin-bottom: 10px; }
+  .nav-toc ol { padding-left: 20px; }
+  .nav-toc ol li { margin: 4px 0; }
+
+  footer {
+    text-align: center;
+    color: var(--text-light);
+    padding: 30px 0;
+    font-size: 0.9em;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <h1>大模型的上下文</h1>
+    <div class="subtitle">概念深度教学方案 · 黑格尔《逻辑学》概念论三环节设计</div>
+    <div class="meta">适用学段：高中信息技术 / 大学 AI 导论 / 工程师入门 ｜ 学习时长：1-2 课时</div>
+  </header>
+
+  <div class="nav-toc">
+    <h3>📋 内容导航</h3>
+    <ol>
+      <li><a href="#diagnose">诊断报告——学生在哪里"卡"住了？</a></li>
+      <li><a href="#teach">教学设计——普遍性 → 特殊性 → 个体性</a></li>
+      <li><a href="#judgment">判断与推理——四层递进训练</a></li>
+      <li><a href="#assess">评估工具——备课清单 / 自评表 / 辅助 Prompt</a></li>
+      <li><a href="#summary">核心教学观点</a></li>
+    </ol>
+  </div>
+
+  <section id="diagnose" class="card">
+    <h2>① 诊断报告 —— 学生在哪里"卡"住了？</h2>
+
+    <h3>1.1 存在论诊断（学生把概念当成了什么？）</h3>
+    <table>
+      <tr><th>学生心中的"影子"</th><th>典型话术</th><th>真实样貌</th></tr>
+      <tr>
+        <td><strong>影子 A：上下文 = 输入的提示词</strong></td>
+        <td>"上下文就是我发给它的问题"</td>
+        <td>还包括系统提示、对话历史、工具返回</td>
+      </tr>
+      <tr>
+        <td><strong>影子 B：上下文 = 聊天记录</strong></td>
+        <td>"它不是一直记着我前面说的话吗？"</td>
+        <td>模型本身无状态，"记忆"依赖当前对话的上下文窗口</td>
+      </tr>
+      <tr>
+        <td><strong>影子 C：上下文越长越好</strong></td>
+        <td>"给它 200K 上下文，它就什么都懂"</td>
+        <td>存在"中间遗忘 (Lost in the Middle)" + 推理成本上升</td>
+      </tr>
+      <tr>
+        <td><strong>影子 D：上下文 = 记忆</strong></td>
+        <td>"下次再开新对话它还记得我"</td>
+        <td>跨会话不持久，需要外接向量库/数据库</td>
+      </tr>
+    </table>
+
+    <div class="breakthrough-box">
+      <span class="label">教学切入点</span>
+      先做"截断实验"——给学生一份 50 页文档，问"文档第 23 页第 4 段说了什么"，让 ta 发现模型真的"看见"了这些 token，但<strong>中间位置</strong>的内容最容易被忽略。
+    </div>
+
+    <h3>1.2 本质论诊断（学生漏掉了什么内在结构？）</h3>
+    <table>
+      <tr><th>必备要素</th><th>学生是否意识到</th></tr>
+      <tr><td>物理层：token 序列、位置编码、注意力掩码</td><td>❌ 大部分学生以为文本是"整体理解"的</td></tr>
+      <tr><td>逻辑层：System / User / Assistant / Tool 四种角色消息</td><td>❌ 只看到自己发的内容</td></tr>
+      <tr><td>功能层：上下文窗口大小（4K / 32K / 128K / 200K / 2M）</td><td>⚠️ 知道有上限，但不知道为什么</td></tr>
+      <tr><td>限制层：位置偏差（首尾效应）、注意力稀释、推理成本</td><td>❌ 完全没意识到</td></tr>
+      <tr><td>扩展层：RAG、压缩、摘要、外部记忆</td><td>❌ 没听过</td></tr>
+    </table>
+
+    <div class="breakthrough-box">
+      <span class="label">突破口</span>
+      用"<strong>路灯下找钥匙</strong>"的隐喻——模型只能"看见"上下文里的东西，没放进去的内容就像车灯照不到的黑夜。
+    </div>
+
+    <h3>1.3 概念论诊断（学生能用概念做事吗？）</h3>
+    <table>
+      <tr><th>任务层级</th><th>学生能做到吗？</th></tr>
+      <tr><td>识别：看到 ChatGPT 截图能指出"哪些是上下文"</td><td>⚠️ 容易漏掉系统提示</td></tr>
+      <tr><td>区分：能说清"上下文 ≠ 记忆 ≠ 输入"</td><td>❌ 概念混用</td></tr>
+      <tr><td>解释：能说清"为什么模型聊久了会忘记开头"</td><td>❌ 不知道位置衰减</td></tr>
+      <tr><td>设计：能为长文档问答系统设计上下文管理</td><td>❌ 没方法</td></tr>
+      <tr><td>评价：能批评"上下文越大越好"的误区</td><td>❌ 缺乏成本/位置意识</td></tr>
+    </table>
+  </section>
+
+  <section id="teach" class="card">
+    <h2>② 教学设计 —— 「普遍性→特殊性→个体性」三环节</h2>
+
+    <h3>2.1 普遍性：什么是"上下文"？（建立统一定义）</h3>
+    <blockquote>
+      <strong>定义</strong>：大模型的"上下文"是模型在生成下一个 token 时能够"看到"的全部文本范围。
+    </blockquote>
+
+    <div class="layer-stack">
+      <div class="layer layer-1">System Prompt（系统提示，定义角色/规则）<br><small>← 模型"出厂设置"</small></div>
+      <div class="layer layer-2">User Message（用户输入，本轮问题）<br><small>← 学生最熟悉的部分</small></div>
+      <div class="layer layer-3">Assistant Message（助手历史回复）<br><small>← 多轮对话累积</small></div>
+      <div class="layer layer-4">Tool Output（工具返回）/ RAG 检索结果<br><small>← 外部世界接口</small></div>
+      <div class="layer-arrow">▼</div>
+      <div class="model-box">大模型（黑盒）</div>
+      <div class="layer-arrow">▼</div>
+      <div class="layer layer-1" style="background: linear-gradient(90deg, #10b981, #059669);">下一个 token</div>
+    </div>
+
+    <div class="core-point">
+      <strong>关键洞见</strong>：上下文 = 模型的"全部工作记忆 + 外部世界接口"。它不是数据库，不是硬盘，而是"此刻模型眼前的那张桌子"。
+    </div>
+
+    <h3>2.2 特殊性：5 类上下文策略（识别差异）</h3>
+    <div class="type-grid">
+      <div class="type-card">
+        <div class="num">1</div>
+        <h4>静态提示型</h4>
+        <p>固定模板，单轮调用<br>文本分类、翻译</p>
+      </div>
+      <div class="type-card">
+        <div class="num">2</div>
+        <h4>滑动窗口型</h4>
+        <p>固定 N tokens，截断最早<br>长文档摘要、流日志</p>
+      </div>
+      <div class="type-card">
+        <div class="num">3</div>
+        <h4>累积对话型</h4>
+        <p>完整保留对话历史<br>ChatGPT 多轮对话</p>
+      </div>
+      <div class="type-card">
+        <div class="num">4</div>
+        <h4>检索增强型 (RAG)</h4>
+        <p>动态从向量库检索<br>企业知识库问答</p>
+      </div>
+      <div class="type-card">
+        <div class="num">5</div>
+        <h4>压缩摘要型</h4>
+        <p>自动压缩早期内容<br>长程任务代理</p>
+      </div>
+    </div>
+
+    <div class="breakthrough-box">
+      <span class="label">教师提问</span>
+      "如果你是产品经理，要做一个 <strong>10 万行代码</strong>的代码评审 AI，你会选哪种？"
+      <br>答：④ RAG（不可能把全部代码塞进上下文） + ⑤ 压缩摘要（保留关键决策历史）。
+    </div>
+
+    <h3>2.3 个体性：在真实模型里落地</h3>
+    <table>
+      <tr><th>模型</th><th>上下文窗口</th><th>适合任务</th><th>注意</th></tr>
+      <tr><td>GPT-4 Turbo</td><td>128K</td><td>长文档分析</td><td>中间位置易丢</td></tr>
+      <tr><td>GPT-4o</td><td>128K</td><td>多模态长对话</td><td>视频/音频也占窗口</td></tr>
+      <tr><td>Claude 3.5 Sonnet</td><td>200K</td><td>长文档推理</td><td>性能稳定</td></tr>
+      <tr><td>Gemini 1.5 Pro</td><td>2M</td><td>整本书/视频</td><td>成本高</td></tr>
+      <tr><td>DeepSeek-V3</td><td>64K</td><td>中文长文本</td><td>中文友好</td></tr>
+      <tr><td>通义千问 Qwen2.5</td><td>128K~1M</td><td>全场景</td><td>开源可微调</td></tr>
+    </table>
+
+    <div class="breakthrough-box">
+      <span class="label">体验任务</span>
+      让学生分别用 4K 和 128K 窗口问同一份长文档的"中间段落细节"，直观感受"中间遗忘"。
+    </div>
+  </section>
+
+  <section id="judgment" class="card">
+    <h2>③ 判断与推理 —— 四层递进训练</h2>
+
+    <div class="judgment-card level-1">
+      <span class="level-tag">① 质的判断</span>
+      <strong>问题</strong>：下面这段对话，哪些属于"上下文"？
+      <pre><code>System: 你是一位耐心的数学老师
+User: 1+1 等于几？
+Assistant: 1+1 = 2
+User: 那 2+2 呢？
+[模型生成的下一个回答]</code></pre>
+      <strong>✅ 答案</strong>：全部四行 + 当前正在生成的，都是上下文。
+    </div>
+
+    <div class="judgment-card level-2">
+      <span class="level-tag">② 反思判断</span>
+      <strong>问题</strong>：模型在 A 对话里记住了用户的名字"小明"，关闭对话后重开新对话，模型还记得吗？
+      <br><br>
+      <strong>✅ 答案</strong>：<strong>不记得</strong>。模型本身无状态（stateless），跨会话记忆需要外接"长期记忆系统"（如向量数据库、键值存储）。
+      <br><br>
+      <table>
+        <tr><th></th><th>上下文 (Context)</th><th>记忆 (Memory)</th><th>输入 (Input)</th></tr>
+        <tr><td>持久性</td><td>仅当前会话</td><td>跨会话（需外存）</td><td>单次</td></tr>
+        <tr><td>范围</td><td>窗口内全部</td><td>理论无限</td><td>当前 prompt</td></tr>
+        <tr><td>类比</td><td>工作台上的工具</td><td>仓库里的存货</td><td>今天寄来的包裹</td></tr>
+      </table>
+    </div>
+
+    <div class="judgment-card level-3">
+      <span class="level-tag">③ 必然判断</span>
+      <strong>问题</strong>：为什么上下文窗口不是越大越好？
+      <br><br>
+      <strong>三层原因</strong>：
+      <ol>
+        <li><strong>注意力稀释 (Attention Dilution)</strong>：上下文越长，每个 token 分到的注意力权重越低 → 中间内容"被忽略"</li>
+        <li><strong>位置偏差 (Position Bias)</strong>：模型对首尾内容记得清，中间容易丢（Lost in the Middle 现象）</li>
+        <li><strong>成本爆炸 (Cost Explosion)</strong>：上下文长度 L，推理计算量约 O(L²) → 200K 上下文比 4K 贵几十倍</li>
+      </ol>
+      <div class="shadow-box">
+        <span class="label">数据点</span>
+        Stanford 研究表明，把关键信息放在 32K 上下文的中间位置，模型回答准确率比放在首尾低 <strong>30%+</strong>。
+      </div>
+    </div>
+
+    <div class="judgment-card level-4">
+      <span class="level-tag">④ 概念判断（应用设计）</span>
+      <strong>任务</strong>：请你为以下场景选择最合适的上下文策略，并说明理由：
+      <ol>
+        <li><strong>客服机器人</strong>：用户问"我昨天买的鞋子几号发货？"</li>
+        <li><strong>法律 AI</strong>：分析 500 页合同，找出违约条款</li>
+        <li><strong>编程助手</strong>：用户在 50 轮对话中迭代开发一个 Web 应用</li>
+        <li><strong>小说创作</strong>：让模型续写《三国演义》第 80 回</li>
+      </ol>
+      <strong>参考答案</strong>：
+      <ol>
+        <li><strong>RAG + 工具调用</strong>：从订单数据库检索实时信息</li>
+        <li><strong>滑动窗口 + 检索增强</strong>：分块读取，定位关键条款</li>
+        <li><strong>压缩摘要</strong>：每 10 轮总结一次，保留关键决策</li>
+        <li><strong>累积对话 + 风格示例</strong>：保留原著前文 + 风格提示</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="assess" class="card">
+    <h2>④ 评估工具</h2>
+
+    <h3>4.1 教师备课自检清单</h3>
+    <ul class="checklist">
+      <li>我能用一句话说出"上下文"的统一定义</li>
+      <li>我能列出上下文的 4 个组成部分</li>
+      <li>我能区分 5 类上下文策略的适用场景</li>
+      <li>我准备了"截断实验"和"中间遗忘实验"的演示</li>
+      <li>我能解释"上下文 ≠ 记忆"的本质区别</li>
+      <li>我能说出至少 3 个主流模型的上下文窗口大小</li>
+      <li>我能设计"长文档问答"的上下文管理方案</li>
+    </ul>
+
+    <h3>4.2 学生自评表</h3>
+    <div class="self-eval-grid">
+      <div class="header">维度</div>
+      <div class="header">不懂</div>
+      <div class="header">听过</div>
+      <div class="header">能解释</div>
+      <div class="header">能应用</div>
+
+      <div class="topic">1. 上下文的统一定义</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">2. 4 个组成部分</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">3. 上下文 ≠ 记忆</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">4. 5 类策略</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">5. 为什么有窗口限制</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">6. 位置偏差现象</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">7. 实际模型窗口对比</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+      <div class="topic">8. 为具体场景设计策略</div>
+      <div class="cell">□</div><div class="cell">□</div><div class="cell">□</div><div class="cell">□</div>
+    </div>
+    <p style="margin-top:10px; font-size:0.92em; color:var(--text-light);">
+      全部 ≥ "能解释" 即达标，"能应用" ≥ 6 项即优秀。
+    </p>
+
+    <h3>4.3 DeepSeek 辅助 Prompt</h3>
+
+    <div class="judgment-card level-1">
+      <strong>学生自查 Prompt</strong>：
+      <pre><code>我正在学习"大模型的上下文"这个概念。请按以下结构帮我自查：
+
+1. 用一句话定义"上下文"，不超过 30 字
+2. 列出上下文的 4 个组成部分
+3. 解释为什么"上下文 ≠ 记忆"
+4. 说出 3 类上下文策略及其适用场景
+5. 设计一个"长文档问答"场景的上下文管理方案
+
+我会给你我的回答，请你打分（0-10）并指出"影子理解"。</code></pre>
+    </div>
+
+    <div class="judgment-card level-2">
+      <strong>教师备课 Prompt</strong>：
+      <pre><code>我要给学生讲"大模型的上下文"（学段：高中信息技术，1 课时 45 分钟）。
+
+请帮我设计：
+1. 一个 5 分钟的导入故事（学生熟悉的场景）
+2. 3 个递进式课堂提问（从定义 → 区分 → 应用）
+3. 1 个分组任务（4 人小组，30 分钟）
+4. 1 道课后思考题（开放性，能区分 A/B 层次）
+
+要求：贴合"黑格尔概念论"——让学生先识别"影子"，再突破，最后能在新场景中应用。</code></pre>
+    </div>
+  </section>
+
+  <section id="summary" class="card">
+    <h2>⑤ 核心教学观点</h2>
+    <div class="core-point">
+      <strong>大模型的"上下文"不是聊天记录，不是数据库，不是记忆，而是模型生成下一个 token 时能"看到"的全部文本——它有窗口限制、位置偏差、成本代价，需要根据场景设计"静态/滑动/累积/RAG/压缩"五种策略才能用好。</strong>
+    </div>
+  </section>
+
+  <footer>
+    教学反思：本方案按"识别影子 → 建立定义 → 区分变体 → 应用设计"四步推进，重点突破"上下文 = 输入/记忆"两大混淆。建议第一节课做截断实验，第二节课做策略设计任务。
+  </footer>
+
+</div>
+</body>
+</html>

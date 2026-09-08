@@ -1,0 +1,17 @@
+# 系统缓存
+.DS_Store
+Thumbs.db
+
+# 编辑器临时文件
+*.swp
+*.swo
+*~
+
+# 日志缓存
+*.log
+/workbuddy_temp/
+__pycache__/
+
+# 密钥隐私文件
+*.env
+secret*.txt
